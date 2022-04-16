@@ -45,19 +45,20 @@ public class Ejercicio1 {
 		
 		Float[] notasAux = new Float[3];
 		int decenas,decimal;
+		int niu = generarNumeroAleatorio(11111,19999);
 		
 		//rellenamos la array con numeros identificativos de alumnos generados aleatoriamente
 		//y tambien las notas
 		for (int i = 0; i < NUMERO_ALUMNOS; i++) {
 			
 			//Añadimos NIU aleatorio como alumno
-			alumnos.add(generarNumeroAleatorio(11111,19999));
+			alumnos.add(niu + i);
 			
 			//Generamos array con notas aleatorias
-			decenas = generarNumeroAleatorio(0, 9);
+			decenas = generarNumeroAleatorio(4, 9);
 			decimal = generarNumeroAleatorio(0, 9);
 			notasAux[0] = Float.parseFloat(decenas + "." + decimal);
-			decenas = generarNumeroAleatorio(0, 9);
+			decenas = generarNumeroAleatorio(5, 9);
 			decimal = generarNumeroAleatorio(0, 9);
 			notasAux[1] = Float.parseFloat(decenas + "." + decimal);
 			decenas = generarNumeroAleatorio(0, 9);
