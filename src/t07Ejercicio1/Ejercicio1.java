@@ -1,6 +1,7 @@
 package t07Ejercicio1;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 /**
  * 
@@ -52,18 +53,14 @@ public class Ejercicio1 {
 		for (int i = 0; i < NUMERO_ALUMNOS; i++) {
 			
 			//Añadimos NIU aleatorio como alumno
-			alumnos.add(niu + i);
+			alumnos.add(i,niu + i);
 			
 			//Generamos array con notas aleatorias
-			decenas = generarNumeroAleatorio(4, 9);
-			decimal = generarNumeroAleatorio(0, 9);
-			notasAux[0] = Float.parseFloat(decenas + "." + decimal);
-			decenas = generarNumeroAleatorio(5, 9);
-			decimal = generarNumeroAleatorio(0, 9);
-			notasAux[1] = Float.parseFloat(decenas + "." + decimal);
-			decenas = generarNumeroAleatorio(0, 9);
-			decimal = generarNumeroAleatorio(0, 9);
-			notasAux[2] = Float.parseFloat(decenas + "." + decimal);
+			for (int j = 0; j < notasAux.length; j++) {
+				decenas = generarNumeroAleatorio(4, 9);
+				decimal = generarNumeroAleatorio(0, 9);
+				notasAux[j] = Float.parseFloat(decenas + "." + decimal);
+			}
 			
 			//Añadimos array con notas aleatorias
 			notas.add(notasAux);
