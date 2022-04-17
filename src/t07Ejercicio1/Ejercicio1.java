@@ -1,7 +1,10 @@
 package t07Ejercicio1;
 
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.Enumeration;
+import java.util.Hashtable;
+
+
+import javax.swing.JOptionPane;
 /**
  * 
  * java-full-stack-dev-u07 - t07Ejercicio1 - Ejercicio1
@@ -12,63 +15,168 @@ import java.util.Random;
  */
 public class Ejercicio1 {
 	
-	public static final int NUMERO_ALUMNOS = 20;
+	public static final int NUMERO_NOTAS = 3;
 
 	public static void main(String[] args) {
 				
-		//declaramos dos array list para los alumnos y las notas 
-		ArrayList<Integer> alumnos = new ArrayList<Integer>();
-		ArrayList<Float[]> notas = new ArrayList<Float[]>();
+		//declaramos dos diccionarios para los alumnos y las notas y otro para alumnos y medias
+		Hashtable<String, Double[]> alumnosNotas = new Hashtable<String, Double[]>();
+		Hashtable<String, Double> alumnosMedia = new Hashtable<String, Double>();
 		
-		generarVariablesAlumnosNotas(alumnos, notas);
+		//Pedimos los alumnos que queremos generar
+		int cantidadAlumnos = proporcionarEntradaAlumnos();
 		
-		System.out.println(alumnos);
-		System.out.println(notas.get(1)[0]);
-		
-	}
-	
-	//Funcion para generar notas aleatorias
-	public static int generarNumeroAleatorio(int numBase, int numTope){
-		
-		Random random;
-		int numeroAleatorio; 
-
-		random = new Random();
-	    numeroAleatorio = numBase + random.nextInt((numTope+1) - numBase);
-		return numeroAleatorio;
-		
-	}
-	
-	
-	//Método para generar los datos de la aplicación de forma aleatoria
-	public static void generarVariablesAlumnosNotas(ArrayList<Integer> alumnos, ArrayList<Float[]> notas) {
-		
-		Float[] notasAux = new Float[3];
-		int decenas,decimal;
-		int niu = generarNumeroAleatorio(11111,19999);
-		
-		//rellenamos la array con numeros identificativos de alumnos generados aleatoriamente
-		//y tambien las notas
-		for (int i = 0; i < NUMERO_ALUMNOS; i++) {
+		//Pedimos los datos y vamos llenando los diccionarios
+		for (int i = 0; i < cantidadAlumnos; i++) {
 			
-			//Añadimos NIU aleatorio como alumno
-			alumnos.add(niu + i);
+			String nombreAlumno = proporcionarEntradaAlumno(i);
+			Double[] notas = new Double[NUMERO_NOTAS];
 			
-			//Generamos array con notas aleatorias
-			decenas = generarNumeroAleatorio(4, 9);
-			decimal = generarNumeroAleatorio(0, 9);
-			notasAux[0] = Float.parseFloat(decenas + "." + decimal);
-			decenas = generarNumeroAleatorio(5, 9);
-			decimal = generarNumeroAleatorio(0, 9);
-			notasAux[1] = Float.parseFloat(decenas + "." + decimal);
-			decenas = generarNumeroAleatorio(0, 9);
-			decimal = generarNumeroAleatorio(0, 9);
-			notasAux[2] = Float.parseFloat(decenas + "." + decimal);
+			for (int j = 0; j < NUMERO_NOTAS; j++) {
+				
+				notas[j] = proporcionarEntradaNota(j);
+				
+			}
 			
-			//Añadimos array con notas aleatorias
-			notas.add(notasAux);
+			alumnosNotas.put(nombreAlumno, notas);
 		}
 		
+		Enumeration<String> enumerationNombre = alumnosNotas.keys();
+		Enumeration<Double[]> enumerationNotas = alumnosNotas.elements();
+		
+		Double media;
+		
+		while (enumerationNotas.hasMoreElements()) {
+			
+			//claculamos la media de las notas del alumno
+			media = calcularMedia(enumerationNotas.nextElement());
+		
+			//creamos diccionario de medias
+			alumnosMedia.put(enumerationNombre.nextElement(), media);
+			
+		}
+		
+		JOptionPane.showMessageDialog(null, "Las notas medias de los alumnos son " + alumnosMedia);
+		
+	}
+	
+	
+	//Valida y proporciona una cadena de letras
+	public static String proporcionarEntradaAlumno(int numero) {
+		
+		String entrada;
+		String patronLetras = "[a-zA-Z].*";
+		
+		
+		do {
+			
+			entrada = JOptionPane.showInputDialog("Introduce el nombre del alumno numero " + numero + "\n"
+						+ " (solo letras)");
+			
+			
+		} while (!validarEntradaPatron(patronLetras, entrada));
+		
+		return entrada;
+
 	}
 
+	//Calcula la media de un array de notas
+	public static Double calcularMedia(Double[] notas) {
+		
+		Double media = 0.0;
+		
+		for (int i = 0; i < notas.length; i++) {
+			
+			media += notas[i];
+			
+		}
+		
+		return media /= notas.length;		
+		
+	}
+	
+	//Valida un patron segun una entrada	
+	public static boolean validarEntradaPatron(String patron, String entrada) {
+		
+		boolean esNumero = false;
+
+		if (entrada != null) {
+
+			if (!entrada.isEmpty()) {
+
+				if (entrada.matches(patron)) {
+
+					esNumero = true;
+
+				}
+
+			}
+
+		} else {
+
+			JOptionPane.showMessageDialog(null, "La aplicaciónn se cerrara");
+			System.exit(0);
+
+		}
+
+		return esNumero;
+	}
+	
+	//Valida y proporcionar numeros enteros
+	public static int proporcionarEntradaAlumnos() {
+		
+		String entrada;
+		String patronEntero = "\\d+";
+		
+		
+		do {
+			
+			entrada = JOptionPane.showInputDialog("Introduce la cantidad de alumnos \n"
+						+ "que quieres generar (tiene que ser un entero positivo)");
+			
+			
+		} while (!validarEntradaPatron(patronEntero, entrada));
+		
+		return Integer.parseInt(entrada);
+		
+	}
+	
+	//Validay proporciona Notas de los alumnos
+	public static Double proporcionarEntradaNota(int numero) {
+		
+		boolean notaValida = false;
+		Double nota = 0.0;
+		String entrada;
+		String patronDecimales = "\\d*(\\.\\d+)?";
+		
+		do {
+			
+			entrada = JOptionPane.showInputDialog("Introduce la nota numero " + numero + " de 3\n" 
+												+ "entre 0 y 10 (El punto ."
+												+ "es separador de decimales)");
+			
+			
+			
+			notaValida = validarEntradaPatron(patronDecimales, entrada);
+
+			if (notaValida) {
+				
+				nota = Double.parseDouble(entrada);
+
+				if (nota < 0 || nota > 10) {
+
+					JOptionPane.showMessageDialog(null, "Introduce una nota entre 0 y 10");
+					notaValida = false;
+
+				}
+				
+			}
+						
+			
+		} while (!notaValida);
+		
+		return Double.parseDouble(entrada);
+		
+	}
+	
 }
