@@ -155,8 +155,6 @@ public class Ejercicio1 {
 												+ "entre 0 y 10 (El punto ."
 												+ "es separador de decimales)");
 			
-			
-			
 			notaValida = validarEntradaPatron(patronDecimales, entrada);
 
 			if (notaValida) {
@@ -171,8 +169,7 @@ public class Ejercicio1 {
 				}
 				
 			}
-						
-			
+							
 		} while (!notaValida);
 		
 		return Double.parseDouble(entrada);
