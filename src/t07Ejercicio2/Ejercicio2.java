@@ -15,8 +15,11 @@ import javax.swing.JOptionPane;
  */
 public class Ejercicio2 {
 
+	//Declaramos las constantes del IVA
 	static final Double IVA_REDUCIDO = 0.04;
 	static final Double IVA_GENERAL = 0.21;
+	
+	//Declaramos las estructuras de datos necesarias pra la aplicación
 	static Hashtable<String, String> productos = new Hashtable<String, String>();
 	static Hashtable<String, Double> ivaProductos = new Hashtable<String, Double>();
 	static Hashtable<String, Double> precioProductos = new Hashtable<String, Double>();
@@ -24,20 +27,23 @@ public class Ejercicio2 {
 
 	public static void main(String[] args) {
 
+		//Generamos los productos
 		generarProductos();
 
-		int menu;
+		int opcionMenu;
 
 		do {
+			
+			//Se muestra el menu y se valida la entrada para elegir una opdicón en e el menú
+			opcionMenu = proporcionarEntradaMenu();
 
-			menu = proporcionarEntradaMenu();
-
-			switch (menu) {
+			switch (opcionMenu) {
 			case 1:
-				;
+				//Se muestras la lista de Productos
 				JOptionPane.showMessageDialog(null,listarProductos());
 				break;
 			case 2:
+				//Mostramos el carrito vacio o lleno
 				String entrada = verCarrito();
 				if (entrada.isEmpty()) {
 					entrada =  "Aun no has agregado nada al carrito";
@@ -45,12 +51,15 @@ public class Ejercicio2 {
 				JOptionPane.showMessageDialog(null, "CARRITO\n" + entrada);
 				break;
 			case 3:
+				//se agrega un Prodcuto al carrito
 				agregarProdcutoCarrito();
 				break;
 			case 4:
+				//se eleimina un prodcuto del carrito
 				eliminarProdcutoCarrito();
 				break;
 			case 5:
+				//se hace el pago del carrito
 				pagarProductos();
 				break;
 			case 6:
@@ -61,9 +70,10 @@ public class Ejercicio2 {
 				break;
 			}
 
-		} while (menu != 6);
+		} while (opcionMenu != 6);
 	}
 
+	//Si el carrito no esta vacio se valida la entrada y se comprueba si hay suficienta dinero, entonces se cobra y se vacia el carrito
 	public static void pagarProductos() {
 				
 		if (verCarrito().isEmpty()) {
@@ -113,10 +123,14 @@ public class Ejercicio2 {
 			
 		}
 		
+		Enumeration<String> idCarrito = carrito.keys();
 		
+		while (idCarrito.hasMoreElements()) {
+			carrito.remove(idCarrito.nextElement());
+		}
 	}
 	
-
+	//Metodo para listar la cuenta
 	public static String[] listarCuenta() {
 
 		String listaCuenta[] = new String[2];
@@ -178,6 +192,7 @@ public class Ejercicio2 {
 
 	}
 
+	//Elimina un producto si existe en el carrito
 	public static void eliminarProdcutoCarrito() {
 		
 		boolean eliminado = false;
@@ -204,7 +219,7 @@ public class Ejercicio2 {
 		
 	}
 
-
+	//Agrega un producto al carrito no suma si el producto esta existe lo duplica
 	public static void agregarProdcutoCarrito() {
 
 		boolean agregado = false;
@@ -234,6 +249,7 @@ public class Ejercicio2 {
 
 	}
 
+	//Metodo que devuelve un string para visualizar el carrito
 	public static String verCarrito() {
 		
 		String listaProductos = "";
@@ -252,6 +268,7 @@ public class Ejercicio2 {
 		
 	}
 
+	//Metodo que lista los productos
 	public static String listarProductos() {
 		
 		String listaProductos = "PRODUCTOS\n";
@@ -270,7 +287,7 @@ public class Ejercicio2 {
 
 	}
 
-	// mostrar carrito
+	//Métod para listar opciones del menú
 	public static String mostrarMenu() {
 
 		String entradaTeclado = JOptionPane.showInputDialog(null,
@@ -283,6 +300,7 @@ public class Ejercicio2 {
 
 	}
 
+	//Método para construir datos de la aplicación
 	public static void generarProductos() {
 
 		productos.put("1", "Chocapic");
@@ -305,7 +323,7 @@ public class Ejercicio2 {
 
 	}
 
-	// Valida un patron segun una entrada
+	//Valida un patron segun una entrada
 	public static boolean validarEntradaPatron(String patron, String entrada) {
 
 		boolean esNumero = false;
@@ -349,6 +367,7 @@ public class Ejercicio2 {
 
 	}
 
+	//Proporciona y valida la entrada del menú
 	public static Integer proporcionarEntradaMenu() {
 
 		String entrada;
@@ -364,6 +383,7 @@ public class Ejercicio2 {
 
 	}
 	
+	//Proporciona y valida la entrada una cantidad a pagar
 	public static Double proporcionarEntradaCantidadPagar(Double importe, String cuenta) {
 
 		String entrada;

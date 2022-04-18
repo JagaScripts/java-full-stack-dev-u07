@@ -33,14 +33,16 @@ public class Ejercicio4 {
 
 		do {
 
+			//Se muestra el menu y se valida la entrada para elegir una opdicón en e el menú
 			menu = proporcionarEntradaMenu();
 
 			switch (menu) {
 			case 1:
-				;
+				//Se muestras la lista de Productos
 				JOptionPane.showMessageDialog(null,listarProductos());
 				break;
 			case 2:
+				//Mostramos el carrito vacio o lleno
 				String entrada = verCarrito();
 				if (entrada.isEmpty()) {
 					entrada =  "Aun no has agregado nada al carrito";
@@ -48,15 +50,27 @@ public class Ejercicio4 {
 				JOptionPane.showMessageDialog(null, "CARRITO\n" + entrada);
 				break;
 			case 3:
+				//se agrega un Prodcuto al carrito
 				agregarProdcutoCarrito();
 				break;
 			case 4:
+				//se eleimina un prodcuto del carrito
 				eliminarProdcutoCarrito();
 				break;
 			case 5:
+				//se hace el pago del carrito
 				pagarProductos();
 				break;
 			case 6:
+				editarStockProducto();
+				break;
+			case 7:
+				agregarProductos();
+				break;
+			case 8:
+				consultarProducto();
+				break;
+			case 9:
 				JOptionPane.showMessageDialog(null, "La aplicaciónn se cerrara");
 				break;
 			default:
@@ -64,9 +78,28 @@ public class Ejercicio4 {
 				break;
 			}
 
-		} while (menu != 6);
+		} while (menu != 9);
 	}
 
+	//Método que actualiza el estock
+	public static void editarStockProducto() {
+		
+		String mensaje = "Listado de productos:\n\n" + listarProductos()
+				+ "\n\nIntroduce el ID del producto que quieres editar";
+		
+		String idProducto = proporcionarEntradaEntero(mensaje);
+		mensaje = "Introduce la cantidad de stock para actualizar";
+		Integer cantidadStock = Integer.parseInt(proporcionarEntradaEntero(mensaje));
+		Integer anteriorStock = stock.get(idProducto);
+		stock.replace(idProducto, cantidadStock);
+		
+		JOptionPane.showMessageDialog(null,
+				"Has actualizado el stock del producto " + productos.get(idProducto) + " ahora hay "
+						+ stock.get(idProducto) + " en stock y antes " + anteriorStock);
+		
+	}
+
+	//Si el carrito no esta vacio se valida la entrada y se comprueba si hay suficienta dinero, entonces se cobra,se vacia el carrito y actualiza el stock
 	public static void pagarProductos() {
 				
 		if (verCarrito().isEmpty()) {
@@ -114,12 +147,30 @@ public class Ejercicio4 {
 			
 			JOptionPane.showMessageDialog(null, listaCuenta);
 			
+			Enumeration<String> enumIdProdcuto = carrito.keys();
+			String idProducto;
+			Integer cantidadCarrito;
+			Integer cantidadStock;
+			Integer cantidadActualizada;
+			
+			while (enumIdProdcuto.hasMoreElements()) {
+				
+				idProducto = (String) enumIdProdcuto.nextElement();
+				cantidadCarrito = carrito.get(idProducto);
+				cantidadStock = stock.get(idProducto);
+				cantidadActualizada = cantidadStock - cantidadCarrito;
+				
+				stock.replace(idProducto, cantidadActualizada);
+				carrito.remove(idProducto);
+				
+			}
+			
 		}
 		
 		
 	}
 	
-
+	//Metodo para listar la cuenta
 	public static String[] listarCuenta() {
 
 		String listaCuenta[] = new String[2];
@@ -181,6 +232,7 @@ public class Ejercicio4 {
 
 	}
 
+	//Elimina un producto si existe en el carrito
 	public static void eliminarProdcutoCarrito() {
 		
 		boolean eliminado = false;
@@ -207,7 +259,7 @@ public class Ejercicio4 {
 		
 	}
 
-
+	//Agrega un producto al carrito no suma si el producto esta existe lo duplica
 	public static void agregarProdcutoCarrito() {
 
 		boolean agregado = false;
@@ -237,6 +289,7 @@ public class Ejercicio4 {
 
 	}
 
+	//Metodo que devuelve un string para visualizar el carrito
 	public static String verCarrito() {
 		
 		String listaProductos = "";
@@ -255,6 +308,7 @@ public class Ejercicio4 {
 		
 	}
 
+	//Metodo que lista los productos
 	public static String listarProductos() {
 		
 		String listaProductos = "PRODUCTOS\n";
@@ -273,20 +327,21 @@ public class Ejercicio4 {
 
 	}
 
-	// mostrar carrito
+	//Método para listar opciones del menú
 	public static String mostrarMenu() {
 
 		String entradaTeclado = JOptionPane.showInputDialog(null,
 				"Menú de opciones flujo ventas \n" + "1. Listar productos \n" + "2. Ver carrito \n"
 						+ "3. Agregar al carrito \n" + "4. Eliminar del carrito \n" + "5. Pasar por caja \n"
 						+ "6. Editar stock producto \n" + "7. Agregar producto\n " + "8. Consultar producto\n"
-						+ "6. Salir \n" + "Para salir de la apliación cancela \n" + "en las entradas de datos \n\n"
+						+ "9. Cerrar la aplicación \n" + "Para salir de la apliación cancela \n" + "en las entradas de datos \n\n"
 						+ "Elige una opción \n\n");
 
 		return entradaTeclado;
 
 	}
 
+	//Método para construir datos de la aplicación
 	public static void generarProductos() {
 
 		productos.put("1", "Pantalon");
@@ -335,58 +390,10 @@ public class Ejercicio4 {
 
 	}
 
-
-	// Valida y proporcionar numeros enteros
-	public static String proporcionarEntradaProducto(String peticion, String listaProductos, String accion) {
-
-		String entrada;
-		String patronEntero = "\\d+";
-
-		do {
-
-			entrada = JOptionPane.showInputDialog("Elige el " + peticion + " que quieres " + accion + " \n"
-					+ "(tiene que ser un entero positivo)\n" + listaProductos);
-
-		} while (!validarEntradaPatron(patronEntero, entrada));
-
-		return String.valueOf(entrada);
-
-	}
-
-	public static Integer proporcionarEntradaMenu() {
-
-		String entrada;
-		String patronEntero = "\\d+";
-
-		do {
-
-			entrada = mostrarMenu();
-
-		} while (!validarEntradaPatron(patronEntero, entrada));
-
-		return Integer.parseInt(entrada);
-
-	}
-	
-	public static Double proporcionarEntradaCantidadPagar(Double importe, String cuenta) {
-
-		String entrada;
-		String patronDouble = "[+-]?\\d*(\\.\\d+)?";
-
-		do {
-
-			entrada = JOptionPane.showInputDialog(cuenta + "Introduce el importe con la que vas a pagar: " + importe + " € "
-					+ "\n(el . es el separador decimal)\n");
-
-		} while (!validarEntradaPatron(patronDouble, entrada));
-
-		return Double.parseDouble(entrada);
-
-	}
-	
-public static void consultarProducto() {
+	//Método para colsultar Productos y su stock
+	public static void consultarProducto() {
 		
-		String idProducto = proporcionarEntradaStock("Introduce id del producto");
+		String idProducto = proporcionarEntradaEntero("Introduce id del producto");
 		System.out.println();
 		String nombreProducto = productos.get(idProducto);
 		Integer cantidadStock = stock.get(idProducto);
@@ -395,14 +402,15 @@ public static void consultarProducto() {
 		
 	}
 
+	//Le agrega un nuevo producto stock
 	public static void agregarProductos() {
 
 		
-		String nombreProducto = proporcionarEntradaProducto("Introduce el nombre del producto");
+		String nombreProducto = proporcionarEntradaCadena("Introduce el nombre del producto");
 		System.out.println();
-		Integer cantidadStock = proporcionarEntradaStock("Introduce una cantidad de stock");
+		Integer cantidadStock = Integer.parseInt(proporcionarEntradaEntero("Introduce una cantidad de stock"));
 		
-		Integer idProdcuto = productos.size() + 1;
+		String idProdcuto = String.valueOf(productos.size() + 1);
 		
 		productos.put(idProdcuto, nombreProducto);
 		stock.put(idProdcuto, cantidadStock);
@@ -413,41 +421,90 @@ public static void consultarProducto() {
 	
 	// Valida un patron segun una entrada
 	public static boolean validarEntradaPatron(String patron, String entrada) {
-
+	
 		boolean esNumero = false;
-
+	
 		if (entrada != null) {
-
+	
 			if (!entrada.isEmpty()) {
-
+	
 				if (entrada.matches(patron)) {
-
+	
 					esNumero = true;
-
+	
 				}
-
+	
 			}
-
+	
 		} else {
-
+	
 			System.out.println("La aplicaciónn se cerrara");
 			System.exit(0);
-
+	
 		}
-
+	
 		return esNumero;
 	}
+
+	//Proporciona y valida la entrada del menú
+	public static Integer proporcionarEntradaMenu() {
 	
+		String entrada;
+		String patronEntero = "\\d+";
+	
+		do {
+	
+			entrada = mostrarMenu();
+	
+		} while (!validarEntradaPatron(patronEntero, entrada));
+	
+		return Integer.parseInt(entrada);
+	
+	}
+
 	// Valida y proporcionar numeros enteros
-	public static String proporcionarEntradaProducto(String mensaje) {
+	public static String proporcionarEntradaProducto(String peticion, String listaProductos, String accion) {
+	
+		String entrada;
+		String patronEntero = "\\d+";
+	
+		do {
+	
+			entrada = JOptionPane.showInputDialog("Elige el " + peticion + " que quieres " + accion + " \n"
+					+ "(tiene que ser un entero positivo)\n" + listaProductos);
+	
+		} while (!validarEntradaPatron(patronEntero, entrada));
+	
+		return String.valueOf(entrada);
+	
+	}
+
+	//Proporciona y valida la entrada una cantidad a pagar
+	public static Double proporcionarEntradaCantidadPagar(Double importe, String cuenta) {
+	
+		String entrada;
+		String patronDouble = "[+-]?\\d*(\\.\\d+)?";
+	
+		do {
+	
+			entrada = JOptionPane.showInputDialog(cuenta + "Introduce el importe con la que vas a pagar: " + importe + " € "
+					+ "\n(el . es el separador decimal)\n");
+	
+		} while (!validarEntradaPatron(patronDouble, entrada));
+	
+		return Double.parseDouble(entrada);
+	
+	}
+
+	// Valida y proporciona una cadena
+	public static String proporcionarEntradaCadena(String mensaje) {
 
 		String entrada;
 		String patronLetras = "[a-zA-Z].*";
 
 		do {
 
-			System.out.println(mensaje);
-			entrada = scanner.next();
+			entrada = JOptionPane.showInputDialog(mensaje);
 
 		} while (!validarEntradaPatron(patronLetras, entrada));
 
@@ -455,20 +512,19 @@ public static void consultarProducto() {
 
 	}
 	
-	public static Integer proporcionarEntradaStock(String mensaje) {
+	//Valida y proporcionar numeros enteros
+	public static String proporcionarEntradaEntero(String mensaje) {
 
 		String entrada;
 		String patronEntero = "\\d+";
 
 		do {
 
-			System.out.println(mensaje);
-			entrada = scanner.next();
-
+			entrada = JOptionPane.showInputDialog(mensaje);
 
 		} while (!validarEntradaPatron(patronEntero, entrada));
 
-		return Integer.parseInt(entrada);
+		return entrada;
 
 	}
 

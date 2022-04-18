@@ -33,17 +33,20 @@ public class Ejercicio3 {
 		int opcion;
 		
 		do {
-			
+			//Se muestra el menu y se valida la entrada para elegir una opdicón en e el menú
 			opcion = proporcionarEntradaMenu();
 			
 			switch (opcion) {
 			case 1:
+				//Se listan los productos
 				listarProductos();
 				break;
 			case 2:
+				//Se agregan productos
 				agregarProductos();
 				break;
 			case 3:
+				//Se consultan los productos
 				consultarProducto();
 				break;
 			case 4:
@@ -60,7 +63,7 @@ public class Ejercicio3 {
 		
 	}
 	
-	
+	//Método que consulta los productos existentes
 	public static void consultarProducto() {
 		
 		Integer idProducto = proporcionarEntradaStock("Introduce id del producto");
@@ -72,6 +75,7 @@ public class Ejercicio3 {
 		
 	}
 
+	//Métod que agrega Productos no tiene en cuenta si existe
 	public static void agregarProductos() {
 
 		
@@ -86,7 +90,8 @@ public class Ejercicio3 {
 		
 		
 	}
-		
+	
+	//Método que lista los productos
 	public static void listarProductos() {
 		
 		Enumeration<Integer> enumeID = productos.keys();
@@ -112,6 +117,7 @@ public class Ejercicio3 {
 		
 	}
 
+	//Método para construir datos de la aplicación
 	public static void generarProductos() {
 
 		productos.put(1, "Pantalon");
@@ -138,6 +144,7 @@ public class Ejercicio3 {
 
 	}
 	
+	//Proporciona y valida la entrada del menú
 	public static Integer proporcionarEntradaMenu() {
 
 		String entrada;
@@ -153,7 +160,7 @@ public class Ejercicio3 {
 
 	}
 
-	
+	//Métod para listar opciones del menú
 	public static String mostrarMenu() {
 		
 		String opcion;
@@ -214,7 +221,7 @@ public class Ejercicio3 {
 		return String.valueOf(entrada);
 
 	}
-	
+	// Valida y proporcionar numeros enteros para el stock
 	public static Integer proporcionarEntradaStock(String mensaje) {
 
 		String entrada;
