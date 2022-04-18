@@ -5,6 +5,7 @@ import java.util.Hashtable;
 
 
 import javax.swing.JOptionPane;
+
 /**
  * 
  * java-full-stack-dev-u07 - t07Ejercicio1 - Ejercicio1
@@ -133,8 +134,7 @@ public class Ejercicio1 {
 			
 			entrada = JOptionPane.showInputDialog("Introduce la cantidad de alumnos \n"
 						+ "que quieres generar (tiene que ser un entero positivo)");
-			
-			
+						
 		} while (!validarEntradaPatron(patronEntero, entrada));
 		
 		return Integer.parseInt(entrada);
