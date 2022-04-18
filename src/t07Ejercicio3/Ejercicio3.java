@@ -87,7 +87,6 @@ public class Ejercicio3 {
 		
 	}
 		
-	//listar informacion
 	public static void listarProductos() {
 		
 		Enumeration<Integer> enumeID = productos.keys();
